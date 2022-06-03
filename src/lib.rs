@@ -22,7 +22,7 @@ impl UgcGateway {
             move |msg| {
                 self.recv(msg);
             }
-        }).unwrap();
+        }).unwrap()?;
         Ok(())
     }
 
