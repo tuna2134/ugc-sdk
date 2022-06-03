@@ -14,9 +14,9 @@ impl UgcGateway {
         UgcGateway {}
     }
 
-    fn connect(&self, url: &str) -> PyResult<()> {
+    fn connect(&self) -> PyResult<()> {
         println!("Connecting...");
-        connect(url, |out| {
+        connect("https://ugc.renorari.net", |out| {
             self.on_open(out);
 
             move |msg| {
