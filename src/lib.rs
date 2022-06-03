@@ -11,7 +11,7 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
 impl UgcGateway {
     #[new]
     fn new() -> Self {
-        UgcGateway {}
+        UgcGateway()
     }
 
     fn connect(&self) -> PyResult<()> {
@@ -22,16 +22,18 @@ impl UgcGateway {
             move |msg| {
                 self.recv(msg);
             }
-        }).unwrap()?;
+        }).unwrap();
         Ok(())
     }
 
     fn on_open(&self, out: Sender) -> PyResult<()> {
         println!("Connected!");
+        Ok(())
     }
 
     fn recv(&self, msg: &str) -> PyResult<()> {
         println!("Received: {}", msg);
+        Ok(())
     }
 }
 
