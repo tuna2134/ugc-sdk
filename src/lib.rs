@@ -1,5 +1,5 @@
 use pyo3::prelude::*;
-use ws::{connect, CloseCode, Sender};
+use ws::{connect};
 
 /// Formats the sum of two numbers as string.
 #[pyfunction]
@@ -7,26 +7,33 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
     Ok((a + b).to_string())
 }
 
+#[pyclass]
+struct UgcGateway {
+    open: bool
+}
+
 #[pymethods]
 impl UgcGateway {
     #[new]
     fn new() -> Self {
-        UgcGateway()
+        UgcGateway {
+            open: false
+        }
     }
 
     fn connect(&self) -> PyResult<()> {
         println!("Connecting...");
-        connect("https://ugc.renorari.net", |out| {
-            self.on_open(out);
+        connect("wss://ugc.renorari.net", |out| {
+            self.on_open();
 
             move |msg| {
                 self.recv(msg);
             }
-        }).unwrap();
+        });
         Ok(())
     }
 
-    fn on_open(&self, out: Sender) -> PyResult<()> {
+    fn on_open(&self) -> PyResult<()> {
         println!("Connected!");
         Ok(())
     }
