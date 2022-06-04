@@ -23,7 +23,7 @@ impl UgcGateway {
 
     fn connect(&self) -> PyResult<()> {
         println!("Connecting...");
-        connect("wss://ugc.renorari.net", |out| {
+        connect("wss://ugc.renorari.net/api/v1/gateway", |out| {
             self.on_open();
 
             move |msg| {
