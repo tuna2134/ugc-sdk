@@ -1,4 +1,4 @@
-from ugc_sdk_core import UgcGateway
+from ugc_sdk import UgcGateway
 
 
 gateway = UgcGateway()

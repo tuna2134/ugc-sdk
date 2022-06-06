@@ -25,7 +25,8 @@ impl UgcGateway {
     fn connect(&self) -> PyResult<()> {
         println!("Connecting...");
         let (mut socket, response) =
-            connect(Url::parse("wss://ugc.renorari.net/api/v1/gateway").unwrap()).expect("Can't connect");
+            connect(Url::parse("wss://ugc.renorari.net/api/v1/gateway").unwrap()).expect("なんらかの原因で接続できない");
+        self.on_open();
         Ok(())
     }
 

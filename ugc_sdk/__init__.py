@@ -1,5 +1,8 @@
-from ugc_sdk_core import UgcGateway as GatewayCore
+from ugc_sdk_core import UgcGateway
 
 
-class UgcGateway(GatewayCore):
-    pass
+class UgcClient:
+    gateway = UgcGateway()
+
+    def connect(self):
+        self.gateway.connect()
