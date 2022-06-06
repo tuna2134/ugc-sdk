@@ -1,5 +1,5 @@
 use pyo3::prelude::*;
-use tungstenite::connect;
+use tungstenite::{connect, Message};
 use url::Url;
 
 /// Formats the sum of two numbers as string.
@@ -10,7 +10,8 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
 
 #[pyclass]
 struct UgcGateway {
-    open: bool
+    open: bool,
+    socket: Option<tungstenite::Websocket<tungstenite::client::Client>>
 }
 
 #[pymethods]
@@ -18,7 +19,8 @@ impl UgcGateway {
     #[new]
     fn new() -> Self {
         UgcGateway {
-            open: false
+            open: false,
+            socket: None
         }
     }
 
@@ -27,16 +29,16 @@ impl UgcGateway {
         let (mut socket, response) =
             connect(Url::parse("wss://ugc.renorari.net/api/v1/gateway").unwrap()).expect("なんらかの原因で接続できない");
         self.on_open();
+        self.socket = Some(socket);
         Ok(())
+    }
+
+    fn recv(&self) -> PyResult<String> {
+        Ok(self.socket.read_message().unwrap())
     }
 
     fn on_open(&self) -> PyResult<()> {
         println!("Connected!");
-        Ok(())
-    }
-
-    fn recv(&self, msg: &str) -> PyResult<()> {
-        println!("Received: {}", msg);
         Ok(())
     }
 }
