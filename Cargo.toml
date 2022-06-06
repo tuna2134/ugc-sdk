@@ -5,9 +5,10 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-name = "ugc_sdk"
+name = "ugc_sdk_core"
 crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.16.3", features = ["extension-module"] }
-tungstenite = { version = "0.17.2", features = ["tls"] }
+tungstenite = { version = "*", features = ["tls"] }
+url = "*"

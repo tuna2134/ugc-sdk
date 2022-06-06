@@ -1,5 +1,6 @@
 use pyo3::prelude::*;
-use ws::{connect};
+use tungstenite::connect;
+use url::Url;
 
 /// Formats the sum of two numbers as string.
 #[pyfunction]
@@ -23,13 +24,8 @@ impl UgcGateway {
 
     fn connect(&self) -> PyResult<()> {
         println!("Connecting...");
-        connect("wss://ugc.renorari.net/api/v1/gateway", |out| {
-            self.on_open();
-
-            move |msg| {
-                self.recv(msg);
-            }
-        });
+        let (mut socket, response) =
+            connect(Url::parse("wss://ugc.renorari.net/api/v1/gateway").unwrap()).expect("Can't connect");
         Ok(())
     }
 
