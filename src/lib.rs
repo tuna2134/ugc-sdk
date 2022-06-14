@@ -14,28 +14,20 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
 #[pyclass]
 struct UgcGateway {
     open: bool,
-    prptocol: Arc<Mutex<UgcGatewayProtocol>>
+    protocol: Arc<Mutex<UgcGatewayProtocol>>
 }
 
 #[pymethods]
 impl UgcGateway {
 
     fn connect(&self) -> PyResult<()> {
-        println!("Connecting...");
-        let (mut socket, response) =
-            connect(Url::parse("wss://ugc.renorari.net/api/v1/gateway").unwrap()).expect("なんらかの原因で接続できない");
-        self.on_open();
-        self.socket = Some(socket);
+        let ws = protocol.lock();
+        ws.connect()
         Ok(())
     }
 
     fn recv(&self) -> PyResult<String> {
         Ok(self.socket.read_message().unwrap())
-    }
-
-    fn on_open(&self) -> PyResult<()> {
-        println!("Connected!");
-        Ok(())
     }
 }
 
