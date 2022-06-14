@@ -10,7 +10,7 @@ struct UgcGatewayProtocol {
 
 impl UgcGatewayProtocol {
 
-    fn connect(&self) -> Result<()> {
+    fn connect(&mut self) -> Result<()> {
         let (mut socket, response) =
             connect(Url::parse("wss://ugc.renorari.net/api/v1/gateway").unwrap()).expect("なんらかの原因で接続できない");
         self.socket = Some(socket);
