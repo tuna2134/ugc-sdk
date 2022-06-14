@@ -3,6 +3,8 @@ use tungstenite::{connect, Message, Websocket};
 use tungstenite::client::Client
 use url::Url;
 
+use protocol::UgcGatewayProtocol
+
 /// Formats the sum of two numbers as string.
 #[pyfunction]
 fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
@@ -12,18 +14,11 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
 #[pyclass]
 struct UgcGateway {
     open: bool,
-    socket: Option<Websocket<Client>>
+    prptocol: Arc<Mutex<UgcGatewayProtocol>>
 }
 
 #[pymethods]
 impl UgcGateway {
-    #[new]
-    fn new() -> Self {
-        UgcGateway {
-            open: false,
-            socket: None
-        }
-    }
 
     fn connect(&self) -> PyResult<()> {
         println!("Connecting...");
