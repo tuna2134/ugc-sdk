@@ -10,14 +10,13 @@ struct UgcGatewayProtocol {
 
 impl UgcGatewayProtocol {
 
-    fn connect(&self) -> PyResult<()> {
+    fn connect(&self) -> Result<()> {
         let (mut socket, response) =
             connect(Url::parse("wss://ugc.renorari.net/api/v1/gateway").unwrap()).expect("なんらかの原因で接続できない");
-        self.on_open();
         self.socket = Some(socket);
     }
       
-    fn recv(&self) -> PyResult<String> {
+    fn recv(&self) -> Result<String> {
         Ok(self.socket.read_message().unwrap())
     }
 }
